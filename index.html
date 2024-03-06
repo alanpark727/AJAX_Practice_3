@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>동물원 list</title>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $.ajax({
+            url: "./zoo.json",
+            dataType: "json"
+        })
+            .done(function (zoo) {
+                if (zoo.length > 0) {
+                    const tb = $("<table/>");
+
+                    for (let i in zoo) {
+                        let $id = zoo[i].id;
+                        let $name = zoo[i].name;
+                        let $gender = zoo[i].gender;
+                        let $kg = zoo[i].kg;
+
+                        let row = $("<tr/>").append(
+                            $("<td/>").text($id),
+                            $("<td/>").text($name),
+                            $("<td/>").text($gender),
+                            $("<td/>").text($kg),
+                        );
+
+                        tb.append(row);
+                    }
+
+                    $(".wrap").append(tb);
+                }
+            });
+        });
+    </script>
+    <style>
+        .wrap {
+            width: 300px;
+        }
+        table {
+            width: 100%;
+            font-size: 18px;
+            padding: 10px;
+            margin: 5px;
+        }
+        table td {
+            padding: 5px;
+            line-height: 20px;
+        }
+        table tr>td:nth-of-type(1) {
+            font-weight: bold;
+        }
+
+        input {
+            width: 276px;
+            margin: 5px;
+            padding: 10px;
+            font-size: 18px;
+            transition: all 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap"></div>
+
+    <input id="myInput" type="text" placeholder="Search..">
+
+    <script>
+        $("#myInput").on("keyup", function () {
+            let value = $(this).val();
+            $(".wrap tr").filter(function () {
+                $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+        $("#myInput").on("focus", function () {
+            $(this).css("background-color","rgba(0,0,0,0.1)");
+        });
+        $("#myInput").on("blur", function () {
+            $(this).css("background-color","");
+        });
+    </script>
+</body>
+</html>
